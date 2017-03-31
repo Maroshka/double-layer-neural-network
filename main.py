@@ -34,10 +34,11 @@ def derv_v(y, p, z):
 	z2 = np.zeros((N,M+1))
 	z2[:, 1:] = z
 	z2[:, 0] = 1
-	ret = np.zeros((M+1, K))
-	for n in range(N):
-		for k in range(K):
-			ret[:, k] += (p[n, k] - y[n, k])*z2[n,:]
+	# ret = np.zeros((M+1, K))
+	# for n in range(N):
+	# 	for k in range(K):
+	# 		ret[:, k] += (p[n, k] - y[n, k])*z2[n,:]
+	ret = z2.T.dot(p-y)
 
 	return ret
 
@@ -45,17 +46,17 @@ def derv_w(y, p, z, v, x):
 	N, D = x.shape
 	M = z.shape[1]
 	K = y.shape[1]
-
 	x2 = np.zeros((N, D+1))
 	x2[:,1:] = x
 	x2[:, 0] = 1
 
-	ret = np.zeros((D+1, M))
-	for n in range(N):
-		for k in range(K):
-			for m in range(M):
-				ret[:, m] += (p[n, k]-y[n, k])*v[m, k]*z[n, m]*(1-z[n, m])*x2[n, :]
-
+	# ret = np.zeros((D+1, M))
+	# for n in range(N):
+	# 	for k in range(K):
+	# 		for m in range(1, M+1):
+	# 			ret[:, m] += (p[n, k]-y[n, k])*v[m, k]*z[n, m]*(1-z[n, m])*x2[n, :]
+	dz = (p-y).dot(v.T)[:, 1:]*z*(1-z)
+	ret = x2.T.dot(dz)
 	return ret
 
 def main():
