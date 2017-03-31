@@ -19,7 +19,6 @@ def forward(x, w, v):
 	expz = np.exp(z3)
 
 	h = expz / expz.sum(axis=1, keepdims=True)
-#	print h
 	return h, a
 
 def cost(y, p):
@@ -37,9 +36,8 @@ def derv_v(y, p, z):
 	z2[:, 0] = 1
 	ret = np.zeros((M+1, K))
 	for n in range(N):
-		# for m in range(M+1):
-			for k in range(K):
-				ret[:, k] += (p[n, k] - y[n, k])*z2[n,:]
+		for k in range(K):
+			ret[:, k] += (p[n, k] - y[n, k])*z2[n,:]
 
 	return ret
 
@@ -56,8 +54,7 @@ def derv_w(y, p, z, v, x):
 	for n in range(N):
 		for k in range(K):
 			for m in range(M):
-				# for d in range(D+1):
-					ret[:, m] += (p[n, k]-y[n, k])*v[m, k]*z[n, m]*(1-z[n, m])*x2[n, :]
+				ret[:, m] += (p[n, k]-y[n, k])*v[m, k]*z[n, m]*(1-z[n, m])*x2[n, :]
 
 	return ret
 
